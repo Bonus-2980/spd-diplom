@@ -3,3 +3,9 @@
 .idea/
 __pycache__/
 media/
+.env
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+/static/

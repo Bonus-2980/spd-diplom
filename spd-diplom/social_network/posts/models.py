@@ -6,7 +6,11 @@ User = get_user_model()
 
 
 class Post(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='posts',
+    )
     text = models.TextField()
     image = models.ImageField(upload_to='posts/')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -29,13 +33,24 @@ class Post(models.Model):
 
 
 class Like(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='likes',
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='likes',
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['post', 'user'], name='unique_like_per_user_post'),
+            models.UniqueConstraint(
+                fields=['post', 'user'],
+                name='unique_like_per_user_post',
+            ),
         ]
         ordering = ['-created_at']
 
@@ -44,8 +59,16 @@ class Like(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='comments',
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='comments',
+    )
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -53,7 +76,10 @@ class Comment(models.Model):
         ordering = ['created_at']
 
     def __str__(self) -> str:
-        return f'Comment(id={self.pk}, post={self.post_id}, author={self.author_id})'
+        return (
+            f'Comment(id={self.pk}, post={self.post_id}, '
+            f'author={self.author_id})'
+        )
 
     def save(self, *args, **kwargs):
         if isinstance(self.text, bytes):
